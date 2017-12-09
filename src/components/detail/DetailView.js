@@ -4,6 +4,7 @@ import ReactMarkdown from 'react-markdown';
 import {Link} from 'react-router-dom';
 
 const Content = ({post}) => {
+  console.log(post)
   if (!post) {
     return <div className="loading-screen">
       <div className="inner">loading...</div>
@@ -23,6 +24,6 @@ const Content = ({post}) => {
 }
 
 export default ({post}) => <div>
-  <Link to="/">&larr; back to list</Link>
+  <Link to="/gistwriter">&larr; back to list</Link>
   <Content post={ post } />
 </div>

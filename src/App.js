@@ -4,7 +4,9 @@ import './App.css';
 import {
   BrowserRouter as Router,
   Route,
-  Link
+  Switch,
+  Link,
+  Redirect
 } from 'react-router-dom';
 import ListView from './components/list/ListView';
 import DetailView from './components/detail/DetailView';
@@ -13,6 +15,7 @@ import {postFilename, getExcerpt} from './util';
 
 const baseUrl = 'https://api.github.com'
 const username = 'maackle'
+const prefix = '/gistwriter'
 
 const List = (posts) => () => <ListView posts={posts} />
 
@@ -22,13 +25,24 @@ const Detail = (posts=[]) => ({match}) => {
   return <DetailView post={post} />
 }
 
+const NoMatch = ({location}) => <div>
+  <h1>404</h1>
+  { location.pathname } not found...
+</div>
+
 const App = ({fetched}) => {
   return (
     <Router>
       <div className="container">
         <h1 className="main-logo">GistWriter</h1>
-        <Route exact path="/" component={List(fetched)}/>
-        <Route path="/:id" component={Detail(fetched)}/>
+        <Switch>
+          <Route path={`${prefix}/:id`} component={Detail(fetched)}/>
+          <Route path={`${prefix}`} component={List(fetched)}/>
+          <Route path="/" component={({location}) => {
+            return <Redirect to={prefix + location.pathname} />;
+          }} />
+          <Route component={NoMatch}/>
+        </Switch>
       </div>
     </Router>
   );

@@ -15,7 +15,7 @@ export default ({posts}) => {
          <img className="author-image" src={post.imageUrl} />
          <div class="info">
           <h2 className="post-title">
-            <Link to={`/${ post.id }`}>{ post.description }</Link>
+            <Link to={`/gistwriter/${ post.id }`}>{ post.description }</Link>
           </h2>
           <div className="byline">
             Posted by { post.username } at { post.timestamp }
