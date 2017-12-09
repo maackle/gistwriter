@@ -9,28 +9,55 @@ import {
 import ListView from './components/list/ListView';
 import DetailView from './components/detail/DetailView';
 import Fetcher from './components/fetcher/Fetcher';
+import {postFilename, getExcerpt} from './util';
 
 const baseUrl = 'https://api.github.com'
+const username = 'maackle'
 
-const List = ({match}) => React.createElement(
-  Fetcher('gists', `${baseUrl}/users/maackle/gists`)(ListView)
-)
+const List = (posts) => () => <ListView posts={posts} />
 
-const Detail = ({match}) => React.createElement(
-  Fetcher('gist', `${baseUrl}/${match.params.id}`)(DetailView)
-)
-
-class App extends Component {
-  render() {
-    return (
-      <Router>
-        <div>
-          <Route exact path="/" component={List}/>
-          <Route path="/:id" component={Detail}/>
-        </div>
-      </Router>
-    );
-  }
+const Detail = (posts=[]) => ({match}) => {
+  const gistId = match.params.id
+  const post = (posts || []).find(p => p.id == gistId)
+  return <DetailView post={post} />
 }
 
-export default App;
+const App = ({fetched}) => {
+  return (
+    <Router>
+      <div className="container">
+        <h1 className="main-logo">GistWriter</h1>
+        <Route exact path="/" component={List(fetched)}/>
+        <Route path="/:id" component={Detail(fetched)}/>
+      </div>
+    </Router>
+  );
+}
+
+const getter = () => {
+  return fetch(`${baseUrl}/users/${username}/gists`)
+    .then(r => r.json())
+    .then(gists => {
+      const promises = gists.map(gist => {
+        const postFile = gist.files[postFilename]
+        if (!postFile) {
+          return null
+        }
+        return fetch(postFile.raw_url)
+          .then(r => r.text())
+          .then(content => ({
+            id: gist.id,
+            description: gist.description,
+            username: gist.owner.login,
+            imageUrl: gist.owner.avatar_url,
+            timestamp: gist.created_at,
+            excerpt: getExcerpt(content),
+            content: content,
+          }))
+      }).filter(x => x)
+
+    return Promise.all(promises)
+  })
+}
+
+export default Fetcher(getter)(App)

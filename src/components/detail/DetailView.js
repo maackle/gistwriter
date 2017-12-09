@@ -1,9 +1,28 @@
 import React, { Component } from 'react';
 import './DetailView.css';
+import ReactMarkdown from 'react-markdown';
+import {Link} from 'react-router-dom';
 
-
-export default ({gist}) => {
+const Content = ({post}) => {
+  if (!post) {
+    return <div className="loading-screen">
+      <div className="inner">loading...</div>
+    </div>
+  }
   return <div className="detail-view">
-    { gist.id }
+    <h1>{ post.description }
+      <div className="byline">
+        Posted by { post.username } at { post.timestamp }
+      </div>
+    </h1>
+
+    <div className="post-content">
+      <ReactMarkdown source={ post.content } />
+    </div>
   </div>
 }
+
+export default ({post}) => <div>
+  <Link to="/">&larr; back to list</Link>
+  <Content post={ post } />
+</div>

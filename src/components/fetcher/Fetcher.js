@@ -3,10 +3,11 @@ import React, { Component } from 'react';
 
 /**
  * A higher-order component to fetch data from an API endpoint
- * @param  {string} propName The prop name to pass to the wrapped component
- * @param  {string} url      The URL to GET
+ * @param  {function} getter      The function used to call the API endpoint
  */
-export default (propName, url) => Wrapped => {
+export default (getter) => Wrapped => {
+
+  const propName = 'fetched';
 
   class Fetcher extends Component {
     constructor(props) {
@@ -21,10 +22,7 @@ export default (propName, url) => Wrapped => {
     }
 
     refresh() {
-      console.log("refresh:", url)
-      return fetch(url)
-      .then(r => r.json())
-      .then(data => this.setState({data}))
+      getter().then(data => this.setState({data}))
     }
 
     render() {
