@@ -5,6 +5,8 @@ Display a blog, backed by GitHub Gists.
 
 This is for an interview challenge, so it's not a serious app, but I'm making this public anyway, hence this disclaimer...
 
+Live version at [https://maackle.github.io/gistwriter/]
+
 ## Configuration
 
 1. Set `username` in App.js to your github username.
