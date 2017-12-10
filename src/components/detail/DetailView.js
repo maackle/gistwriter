@@ -4,7 +4,6 @@ import ReactMarkdown from 'react-markdown';
 import {Link} from 'react-router-dom';
 
 const Content = ({post}) => {
-  console.log(post)
   if (!post) {
     return <div className="loading-screen">
       <div className="inner">loading...</div>
@@ -23,7 +22,11 @@ const Content = ({post}) => {
   </div>
 }
 
-export default ({post}) => <div>
-  <Link to="/gistwriter">&larr; back to list</Link>
+export default ({post, prev, next}) => <div>
+  <nav class="detail-nav">
+    { prev ? <Link to={`/gistwriter/${prev.id}`}>↞ previous</Link> : <div/> }
+    <Link to="/gistwriter">↟ back to list</Link>
+    { next ? <Link to={`/gistwriter/${next.id}`}>next ↠</Link> : <div/> }
+  </nav>
   <Content post={ post } />
 </div>

@@ -10,7 +10,6 @@ export default ({posts}) => {
   ]
   const items = (posts || []).map(post =>
     <article class="post-listing">
-
       <div>
          <img className="author-image" src={post.imageUrl} />
          <div class="info">

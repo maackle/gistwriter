@@ -50,7 +50,7 @@ a:hover {
 
 .post-listing {
   padding: 30px 0;
-  border-top: 1px solid #ccc;
+  border-top: 1px solid #ddd;
 }
 .post-listing:first-child {
   border: none;
@@ -76,4 +76,9 @@ a:hover {
   border-radius: 50%;
   vertical-align: middle;
   margin-right: 10px;
+}
+
+.detail-nav {
+  display: flex;
+  justify-content: space-between;
 }

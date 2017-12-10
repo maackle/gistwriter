@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
-import './App.css';
 import {
   BrowserRouter as Router,
   Route,
@@ -21,8 +20,12 @@ const List = (posts) => () => <ListView posts={posts} />
 
 const Detail = (posts=[]) => ({match}) => {
   const gistId = match.params.id
-  const post = (posts || []).find(p => p.id == gistId)
-  return <DetailView post={post} />
+  const postIndex = (posts || []).findIndex(p => p.id == gistId)
+  return <DetailView
+          post={(posts || {})[postIndex]}
+          next={(posts || {})[postIndex + 1]}
+          prev={(posts || {})[postIndex - 1]}
+          />
 }
 
 const NoMatch = ({location}) => <div>
@@ -34,7 +37,7 @@ const App = ({fetched}) => {
   return (
     <Router>
       <div className="container">
-        <h1 className="main-logo">GistWriter</h1>
+        <h1 className="main-logo">Gist👻Writer</h1>
         <Switch>
           <Route path={`${prefix}/:id`} component={Detail(fetched)}/>
           <Route path={`${prefix}`} component={List(fetched)}/>
@@ -69,7 +72,6 @@ const getter = () => {
             content: content,
           }))
       }).filter(x => x)
-
     return Promise.all(promises)
   })
 }
